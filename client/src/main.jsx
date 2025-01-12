@@ -1,17 +1,25 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { Provider } from 'react-redux'
-import { appStore } from './app/store'
-import { Toaster } from 'sonner'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { Toaster } from "sonner";
+import App from "./App.jsx";
+import { appStore } from "./app/store";
+import { useLoadUserQuery } from "./features/api/authApi";
+import "./index.css";
+import LoadingSpinner from "./components/LoadingSpinner.jsx";
 
-createRoot(document.getElementById('root')).render(
+const Custom = ({ children }) => {
+  const { isloading } = useLoadUserQuery();
+  return <>{isloading ? <LoadingSpinner/> : <>{children}</>}</>;
+};
+
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={appStore}>
-      <App />
-      <Toaster/>
+      <Custom>
+        <App />
+        <Toaster />
+      </Custom>
     </Provider>
-    
-  </StrictMode>,
-)
+  </StrictMode>
+);
